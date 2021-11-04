@@ -1,0 +1,41 @@
+# Learn more about this file at https://www.gitpod.io/docs/references/gitpod-yml
+image:
+  file: .gitpod.Dockerfile
+
+ports:
+  # Rails server
+  - port: 3000
+    onOpen: open-preview
+  # PostgreSQL server
+  - port: 5432
+    onOpen: ignore
+
+tasks:
+  - init: >
+      bundle install &&
+      yarn install &&
+      rake db:create && 
+      gp sync-done setup
+    command: >
+      foreman start -f Procfile.dev
+  - command: >
+      gp sync-await setup &&
+      bash 
+  - command: >
+      gp sync-await setup &&
+      rails console
+
+# Enable prebuilds of your project to enable faster workspace start times.
+# https://www.gitpod.io/docs/prebuilds/#configure-the-github-app
+github:
+  prebuilds:
+    master: true
+    branches: true
+    pullRequests: true
+    pullRequestsFromForks: true
+    addCheck: true
+
+vscode:
+  extensions:
+    - rebornix.ruby
+
